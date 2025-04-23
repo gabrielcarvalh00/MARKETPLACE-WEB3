@@ -1,12 +1,10 @@
 <!DOCTYPE html>
 <html>
   <body>
-
-    
     <label>Digite o nome da cidade:</label>
     <input type="text" id="inputText" placeholder="Digite aqui" oninput="buscarCidade()" />
 
-    <div id="data">
+    <div id="data"></div>
 
     <script>
       function buscarCidade() {
@@ -20,7 +18,7 @@
               return res.json();
             })
             .then(data => {
-              const resultado = data.map(item => item.city).join(', ');
+              const resultado = data.map(item => `${item.city} - ${item.address}`).join('<br>');
               document.getElementById('data').innerHTML = resultado || 'Nenhuma cidade encontrada.';
             })
             .catch(err => {
@@ -28,7 +26,7 @@
               document.getElementById('data').innerHTML = 'Erro ao carregar dados.';
             });
         } else {
-          document.getElementById('data').innerHTML = ''; // Limpa quando o campo está vazi
+          document.getElementById('data').innerHTML = ''; // Limpa quando o campo está vazio
         }
       }
     </script>

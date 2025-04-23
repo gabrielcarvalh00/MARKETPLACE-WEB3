@@ -26,15 +26,12 @@ app.use(express.static('./public'));
 
 
 app.get('/cidades', (req, res) => {
-  const cidade = req.query.cidade;  // Pegando o parâmetro "cidade" enviado pelo input
-  const query = `SELECT city FROM image WHERE city LIKE ?`; // Consulta SQL para buscar cidades semelhantes
-
-  con.query(query, [`%${cidade}%`], (err, results) => {
+  const cidade = req.query.cidade;
+  con.query('SELECT city, address FROM image WHERE city LIKE ?', [`%${cidade}%`], (err, results) => {
     if (err) {
-      console.error('Erro ao acessar o banco de dados:', err);
       return res.status(500).send('Erro ao acessar o banco de dados');
     }
-    res.json(results);  // Envia as cidades como resposta em formato JSON
+    res.json(results);
   });
 });
 
