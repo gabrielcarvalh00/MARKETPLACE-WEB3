@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <body>
+
+    
+    <label>Digite o nome da cidade:</label>
+    <input type="text" id="inputText" placeholder="Digite aqui" oninput="buscarCidade()" />
+
+    <div id="data">
+
+    <script>
+      function buscarCidade() {
+        const cidade = document.getElementById('inputText').value;
+        if (cidade) {
+          fetch(`/cidades?cidade=${cidade}`)
+            .then(res => {
+              if (!res.ok) {
+                throw new Error('Erro na resposta da API');
+              }
+              return res.json();
+            })
+            .then(data => {
+              const resultado = data.map(item => item.city).join(', ');
+              document.getElementById('data').innerHTML = resultado || 'Nenhuma cidade encontrada.';
+            })
+            .catch(err => {
+              console.error('Erro no fetch:', err);
+              document.getElementById('data').innerHTML = 'Erro ao carregar dados.';
+            });
+        } else {
+          document.getElementById('data').innerHTML = ''; // Limpa quando o campo está vazio
+        }
+      }
+    </script>
+  </body>
+</html>
