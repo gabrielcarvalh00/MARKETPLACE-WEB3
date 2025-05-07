@@ -1,0 +1,85 @@
+/* Configuração do fundo da página */
+body {
+    background: linear-gradient(to right, #141414, #1c1c1c, #141414);
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh; /* Garante que a altura mínima da página ocupe a tela toda */
+}
+
+/* Título centralizado com efeito de sombra suave */
+#label {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 3.5em;
+    font-weight: 800;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    text-shadow: 0 0 15px rgba(0, 0, 0, 0.5), 0 0 30px rgba(0, 0, 0, 0.7);
+    letter-spacing: 2px;
+}
+
+/* Container do formulário com fundo escuro, bordas suaves e leve transparência */
+.form {
+    max-width: 480px;
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 30px;
+    border-radius: 8px;
+    margin: 40px auto;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilização dos labels com cor suave */
+.form label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.1em;
+    color: #bbb;
+}
+
+/* Inputs com bordas finas, foco claro e fundo escuro */
+.form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    font-size: 1.1em;
+    background-color: #222;
+    color: #fff;
+    transition: all 0.3s ease;
+}
+
+/* Foco dos inputs, com leve brilho */
+.form input:focus {
+    border: 1px solid #e50914;
+    box-shadow: 0 0 8px rgba(229, 9, 20, 0.7);
+}
+
+/* Botão com efeito de transição suave e cor vibrante */
+.form button {
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 5px;
+    background-color: #e50914;
+    color: #fff;
+    font-size: 1.2em;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease, transform 0.2s;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.form button:hover {
+    background-color: #f40612;
+    transform: scale(1.05);
+}
+
+.form button:active {
+    background-color: #e50914;
+    transform: scale(1);
+}

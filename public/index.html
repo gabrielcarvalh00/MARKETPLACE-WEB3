@@ -1,34 +1,86 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <link rel="stylesheet" href="index.css">
+    <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap" rel="stylesheet">
+  </head>
   <body>
-    <label>Digite o nome da cidade:</label>
-    <input type="text" id="inputText" placeholder="Digite aqui" oninput="buscarCidade()" />
 
-    <div id="data"></div>
+    <h1 id="label">MAKE UPLOAD YOUR IMAGE</h1>
 
+    <br>
     <script>
-      function buscarCidade() {
-        const cidade = document.getElementById('inputText').value;
-        if (cidade) {
-          fetch(`/cidades?cidade=${cidade}`)
-            .then(res => {
-              if (!res.ok) {
-                throw new Error('Erro na resposta da API');
-              }
-              return res.json();
-            })
-            .then(data => {
-              const resultado = data.map(item => `${item.city} - ${item.address}`).join('<br>');
-              document.getElementById('data').innerHTML = resultado || 'Nenhuma cidade encontrada.';
-            })
-            .catch(err => {
-              console.error('Erro no fetch:', err);
-              document.getElementById('data').innerHTML = 'Erro ao carregar dados.';
-            });
-        } else {
-          document.getElementById('data').innerHTML = ''; // Limpa quando o campo está vazio
+      document.getElementById('submitBtn').addEventListener('click', async (e) => {
+        e.preventDefault(); // Previne o comportamento padrão de envio do formulário
+    
+        // Captura os dados do formulário
+        const data = {
+          AddressServer: document.getElementById('AddressServer').value,
+          Value: document.getElementById('Value').value,
+          Description: document.getElementById('Description').value,
+          NameOwer: document.getElementById('NameOwer').value,
+          WalletAddress: document.getElementById('WalletAddress').value,
+          DroneBrand: document.getElementById('DroneBrand').value,
+          LocalLat: document.getElementById('LocalLat').value,
+          LocalLong: document.getElementById('LocalLong').value,
+          DateRegister: document.getElementById('DateRegister').value
+        };
+    
+        try {
+          // Envia os dados para a rota /insert do servidor
+          const response = await fetch('/insert', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+          });
+    
+          if (response.ok) {
+            const result = await response.text(); // Resposta do servidor
+            alert(result); // Exibe a resposta do servidor (sucesso)
+          } else {
+            alert('Erro ao enviar dados'); // Caso ocorra erro na resposta
+          }
+        } catch (error) {
+          console.error('Erro ao enviar dados:', error);
+          alert('Erro ao enviar dados');
         }
-      }
+      });
     </script>
+    
+    
+    
+    <div class="form">
+      <label for="Address">Address Server:</label>
+      <input type="text" id="AddressServer" name="AddressServer"><br>
+      
+      <label for="Value">Value</label>
+      <input type="text" name="Value" id="Value"><br>
+
+      <label for="Description">Description</label>
+      <input type="text" name="Description" id="Description"><br>
+
+      <label for="NameOwer">Name Ower</label>
+      <input type="text" name="NameOwer" id="NameOwer"><br>
+
+      <label for="WalletAddress">Wallet Address</label>
+      <input type="text" name="WalletAddress" id="WalletAddress"><br>
+
+      <label for="DroneBrand">Drone Brand</label>
+      <input type="text" name="DroneBrand" id="DroneBrand"><br>
+    
+      <label for="LocalLat">Local Lat</label>
+      <input type="text" name="LocalLat" id="LocalLat"><br>
+
+      <label for="LocalLong">Local Long</label>
+      <input type="text" name="LocalLong" id="LocalLong"><br>
+      
+      <label for="DateRegister">Date Register</label>
+      <input type="text" name="DateRegister" id="DateRegister"><br>
+      
+      <button id="submitBtn">Enviar</button>
+    </div>
+
   </body>
 </html>
