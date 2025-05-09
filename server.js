@@ -2,44 +2,50 @@ import express from "express";
 import mysql from "mysql";
 
 
-
-const con=mysql.createConnection({
+const con = mysql.createConnection({
     host: 'localhost',
-    user:'root',
+    user: 'root',
     password: 'admin123',
-    database:'BlockChain'
-}
-)
+    database: 'BlockChain'
+});
 
-  con.connect((err) => {
-      if (err) {
-          console.error('Erro ao conectar ao banco de dados:', err.stack);
-          return;
-      }
-      console.log('Conexão bem-sucedida ao banco de dados');
-  });
+con.connect((err) => {
+    if (err) {
+        console.error('Erro ao conectar ao banco de dados:', err.stack);
+        return;
+    }
+    console.log('Conexão bem-sucedida ao banco de dados');
+});
+// Middleware para processar o corpo da requisição como JSON
 
 const app = express();
+const port = 3030;
 
-//especificing where foldr html
+// Middleware para interpretar o corpo da requisição como JSON
+app.use(express.json());
+
+// Especificando onde está a pasta HTML
 app.use(express.static('./public'));
 
 app.post('/insert', (req, res) => {
-  const { AddressServer, Value, Description, NameOwer, WalletAddress, DroneBrand, LocalLat, LocalLong, DateRegister } = req.body;
+  const nomeAluno = req.body.nome;
 
-  const query = `INSERT INTO Image (address, description, drone_manufacturer, location_lat, location_lon, seller_id, registrationdata) VALUES (?, ?, ?, ?, ?, ?, ?)`;
+  // Verifica se o nome foi enviado
+  if (!nomeAluno) {
+      return res.status(400).send('Nome do aluno é obrigatório');
+  }
 
-  con.query(query, [AddressServer, Description, DroneBrand, LocalLat, LocalLong, NameOwer, DateRegister], (err, result) => {
-    if (err) {
-      return res.status(500).send('Erro ao inserir dados'); // Resposta de erro
-    }
-    res.status(200).send('Dados inseridos com sucesso'); // Resposta de sucesso
+  // Inserção no banco de dados
+  const query = 'INSERT INTO Aluno (nome) VALUES (?)';
+  con.query(query, [nomeAluno], (err, result) => {
+      if (err) {
+          console.error('Erro ao inserir dados:', err);
+          return res.status(500).send('Erro ao inserir dados');
+      }
+      res.send(`Aluno ${nomeAluno} inserido com sucesso!`);
   });
 });
 
-
-
-
-app.listen(3030, () => {
-  console.log('Running server');
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
 });
