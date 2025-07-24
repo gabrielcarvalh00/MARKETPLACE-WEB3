@@ -150,8 +150,8 @@ app.get('/coordenadas', (req, res) => {
 });
 */
 
-
-   app.get('/imagens-por-area', (req, res) => {
+//
+app.get('/imagens-por-area', (req, res) => {
 
     const { latMin, latMax, lngMin, lngMax } = req.query;
 

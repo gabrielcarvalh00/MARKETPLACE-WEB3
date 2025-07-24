@@ -12,6 +12,16 @@
   <style>
     #map {
       height: 500px;
+      margin-bottom: 20px;
+    }
+    #resultados {
+      font-family: Arial, sans-serif;
+    }
+    #resultados div {
+      background: #f9f9f9;
+      padding: 10px;
+      margin-bottom: 10px;
+      border: 1px solid #ccc;
     }
   </style>
 </head>
@@ -19,12 +29,13 @@
 
   <h1>Mapa com Captura de Coordenadas</h1>
   <div id="map"></div>
+  <div id="resultados"></div>
 
   <script>
     // Coordenadas iniciais
-    var latitude = -14.806849833333334
-    var longitude = -39.28486733333333
-    var delta = 1.00
+    var latitude = -14.806849833333334;
+    var longitude = -39.28486733333333;
+    var delta = 1.00;
 
     // Inicializa o mapa
     var map = L.map('map').setView([latitude, longitude], 13);
@@ -36,7 +47,7 @@
 
     // Marcador no ponto central
     L.marker([latitude, longitude]).addTo(map)
-      .bindPopup('Ponto incial')
+      .bindPopup('Ponto inicial')
       .openPopup();
 
     // Captura de coordenadas ao clicar no mapa
@@ -44,38 +55,48 @@
     var latMin, latMax, lngMin, lngMax;
 
     map.on('click', function(e) {
-      //pegando longitude e latitude
       latClicked = e.latlng.lat;
       lngClicked = e.latlng.lng;
 
-
-     //latMin ≤ lat ≤ latMax e lngMin ≤ lng ≤ lngMax para verificar se esta dentro de um raio de 5km
       latMin = latClicked - delta;
       latMax = latClicked + delta;
       lngMin = lngClicked - delta;
       lngMax = lngClicked + delta;
-      // Dentro do seu map.on('click', function(e) { ... }) após calcular os deltas:
 
-// ... (cálculos de latMin, latMax, lngMin, lngMax) ...
+      console.log("Fazendo requisição para a nova rota com os limites...");
+      fetch(`/imagens-por-area?latMin=${latMin}&latMax=${latMax}&lngMin=${lngMin}&lngMax=${lngMax}`)
+        .then(response => {
+          if (!response.ok) {
+            return response.json().then(error => {
+              throw new Error(error.message || 'Erro ao carregar dados');
+            });
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Imagens encontradas na área:", data);
+          const resultadoDiv = document.getElementById("resultados");
+          resultadoDiv.innerHTML = "<h3>Resultados encontrados:</h3>";
 
-console.log("Fazendo requisição para a nova rota com os limites...");
-fetch(`/imagens-por-area?latMin=${latMin}&latMax=${latMax}&lngMin=${lngMin}&lngMax=${lngMax}`)
-    .then(response => {
-        if (!response.ok) {
-            // Se a resposta não for 2xx (ex: 400, 500), joga um erro
-            return response.json().then(error => { throw new Error(error.message || 'Erro ao carregar dados'); });
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Imagens encontradas na área:", data);
-        // Aqui você pode fazer algo com os dados recebidos,
-        // como adicionar marcadores no mapa para cada imagem
-    })
-    .catch(error => {
-        console.error("Erro ao buscar imagens por área:", error);
-        alert("Erro ao buscar imagens: " + error.message);
-    });
+          if (data.length === 0) {
+            resultadoDiv.innerHTML += "<p>Nenhum resultado encontrado.</p>";
+          } else {
+            data.forEach(imagem => {
+              resultadoDiv.innerHTML += `
+                <div>
+                  <strong>ID:</strong> ${imagem.id}<br>
+                  <strong>Latitude:</strong> ${imagem.location_lat}<br>
+                  <strong>Longitude:</strong> ${imagem.location_lon}<br>
+                  <strong>Descrição:</strong> ${imagem.description || 'Sem descrição'}<br>
+                </div>
+              `;
+            });
+          }
+        })
+        .catch(error => {
+          console.error("Erro ao buscar imagens por área:", error);
+          alert("Erro ao buscar imagens: " + error.message);
+        });
 
       console.log("Latitude clicada:", latClicked);
       console.log("Longitude clicada:", lngClicked);
@@ -87,7 +108,6 @@ fetch(`/imagens-por-area?latMin=${latMin}&latMax=${latMax}&lngMin=${lngMin}&lngM
         .setContent("Coordenadas: " + latClicked.toFixed(5) + ", " + lngClicked.toFixed(5))
         .openOn(map);
     });
- 
   </script>
 
 </body>
