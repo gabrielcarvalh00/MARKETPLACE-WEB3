@@ -62,9 +62,9 @@
         output.textContent = JSON.stringify(metadata, null, 2);
 
         if (metadata && typeof metadata.latitude === 'number' && typeof metadata.longitude === 'number') {
-          //simulando as cordenadas
-          latitude = 14; //13-15
-          longitude = 40;//39-41
+          
+          latitude = metadata.latitude;
+          longitude = metadata.longitude;
 
           console.log('Latitude:', latitude);
           console.log('Longitude:', longitude);

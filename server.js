@@ -44,7 +44,7 @@ function getRandomItem(arr) {
     return arr[Math.floor(Math.random() * arr.length)];
 }
 
-/*
+
 //pega o imput da imagem e insere tabele imagem;
 app.post('/rota', (req, res) => {
     console.log("Chegou aqui na rota /rota");
@@ -101,7 +101,7 @@ app.post('/rota', (req, res) => {
         res.status(400).json({ message: 'Dados de latitude ou longitude ausentes na requisição.' });
     }
 });
-*/
+
 
 
 /*
@@ -151,7 +151,7 @@ app.get('/coordenadas', (req, res) => {
 */
 
 
-app.get('/imagens-por-area', (req, res) => {
+   app.get('/imagens-por-area', (req, res) => {
 
     const { latMin, latMax, lngMin, lngMax } = req.query;
 

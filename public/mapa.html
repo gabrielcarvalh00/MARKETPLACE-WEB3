@@ -45,8 +45,8 @@
 
     map.on('click', function(e) {
       //pegando longitude e latitude
-      latClicked = 14.00; //13-15
-      lngClicked = 40.00; //39-41
+      latClicked = e.latlng.lat;
+      lngClicked = e.latlng.lng;
 
 
      //latMin ≤ lat ≤ latMax e lngMin ≤ lng ≤ lngMax para verificar se esta dentro de um raio de 5km
