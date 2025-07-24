@@ -22,9 +22,9 @@
 
   <script>
     // Coordenadas iniciais
-    var latitude = -23.5505
-    var longitude = -46.6333
-    var delta = 0.045;
+    var latitude = -14.806849833333334
+    var longitude = -39.28486733333333
+    var delta = 1.00
 
     // Inicializa o mapa
     var map = L.map('map').setView([latitude, longitude], 13);
@@ -36,7 +36,7 @@
 
     // Marcador no ponto central
     L.marker([latitude, longitude]).addTo(map)
-      .bindPopup('Ponto Central: São Paulo, BA')
+      .bindPopup('Ponto incial')
       .openPopup();
 
     // Captura de coordenadas ao clicar no mapa
@@ -45,8 +45,8 @@
 
     map.on('click', function(e) {
       //pegando longitude e latitude
-      latClicked = e.latlng.lat;
-      lngClicked = e.latlng.lng;
+      latClicked = 14.00; //13-15
+      lngClicked = 40.00; //39-41
 
 
      //latMin ≤ lat ≤ latMax e lngMin ≤ lng ≤ lngMax para verificar se esta dentro de um raio de 5km

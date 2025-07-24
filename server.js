@@ -8,6 +8,17 @@ const con = mysql.createConnection({
     database: 'BlockChain'
 });
 
+// state.js
+const state = {
+    minLat: null,
+    maxLat: null,
+    minLng: null,
+    maxLng: null
+};
+
+export default state;
+
+
 con.connect((err) => {
     if (err) {
         console.error('Erro ao conectar ao banco de dados:', err.stack);
@@ -34,7 +45,7 @@ function getRandomItem(arr) {
 }
 
 /*
-//pega o imput da imagem e insere ta bale imagem;
+//pega o imput da imagem e insere tabele imagem;
 app.post('/rota', (req, res) => {
     console.log("Chegou aqui na rota /rota");
 
@@ -92,6 +103,8 @@ app.post('/rota', (req, res) => {
 });
 */
 
+
+/*
 //traz todas as cordenadas do bd de todas as imagens
 app.get('/coordenadas', (req, res) => {
     console.log("chegou aqui");
@@ -135,25 +148,53 @@ app.get('/coordenadas', (req, res) => {
         res.status(200).json(results); // Ou res.status(200).json(todasAsCoordenadas);
     });
 });
+*/
 
 
 app.get('/imagens-por-area', (req, res) => {
-    // 1. Pegar as variáveis da query string
+
     const { latMin, latMax, lngMin, lngMax } = req.query;
 
-    // 2. Validar se as variáveis existem e são números
-    if (latMin === undefined || latMax === undefined || lngMin === undefined || lngMax === undefined ||
-        isNaN(parseFloat(latMin)) || isNaN(parseFloat(latMax)) || isNaN(parseFloat(lngMin)) || isNaN(parseFloat(lngMax))) {
+    if (
+        latMin === undefined || latMax === undefined ||
+        lngMin === undefined || lngMax === undefined ||
+        isNaN(parseFloat(latMin)) || isNaN(parseFloat(latMax)) ||
+        isNaN(parseFloat(lngMin)) || isNaN(parseFloat(lngMax))
+    ) {
         return res.status(400).json({ message: 'Parâmetros de coordenadas (latMin, latMax, lngMin, lngMax) são obrigatórios e devem ser números.' });
     }
 
-    // Converter para números (caso venham como strings da URL)
-    const minLat = parseFloat(latMin);
-    const maxLat = parseFloat(latMax);
-    const minLng = parseFloat(lngMin);
-    const maxLng = parseFloat(lngMax);
-  
- });
+     //pegando as latitude e longitudess=
+    const minLat = parseFloat(latMin);//13
+    const maxLat = parseFloat(latMax);//15
+    const minLng = parseFloat(lngMin);//39
+    const maxLng = parseFloat(lngMax);//41
+
+/*
+    console.log(minLat)
+    console.log(maxLat)
+    console.log(minLng)
+    console.log(maxLng)
+    //console.log("----------------------------");
+  */ 
+
+    const sql = `
+        SELECT * FROM Image
+        WHERE location_lat BETWEEN ? AND ?
+          AND location_lon BETWEEN ? AND ?
+    `;
+
+    con.query(sql, [minLat, maxLat, minLng, maxLng], (err, results) => {
+        if (err) {
+            console.error('Erro ao buscar imagens:', err);
+            return res.status(500).json({ message: 'Erro no banco de dados.' });
+        }
+
+        console.log("Resultados encontrados:", results); // <-- Aqui imprime no terminal
+
+        res.status(200).json(results);
+    });
+});
 
 
 
